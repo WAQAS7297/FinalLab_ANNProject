@@ -42,7 +42,8 @@ The goal was to explore the capabilities of different frameworks and architectur
   - Hidden Layers: Two fully connected layers with 64 units each (ReLU activation).
   - Output: 1 unit (for regression output).
 
-    ![alt text](image.png)
+  ![IMG-20241229-WA0031](https://github.com/user-attachments/assets/782cd90f-4919-4f4b-8822-a47ef920dae6)
+
 
 ### **3.2 PyTorch ANN (Classification)**
 - **Architecture**:
