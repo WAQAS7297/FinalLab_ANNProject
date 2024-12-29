@@ -36,6 +36,23 @@ class DataLoaderModule:
         y_val = torch.tensor(y_val, dtype=torch.float32).view(-1,1)
         return X_train, y_train, X_val, y_val
 
+    def _load_classification_data(self, batch_size=64, dataset='CIFAR10'):
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5,), (0.5,))
+        ])
+        if dataset == 'CIFAR10':
+            train_set = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+            val_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+        elif dataset == 'CIFAR100':
+            train_set = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform)
+            val_set = torchvision.datasets.CIFAR100(root='./data', train=False, download=True, transform=transform)
+        else:
+            raise ValueError("Unsupported dataset. Choose between 'CIFAR10' and 'CIFAR100'.")
+        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
+        val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False)
+        return train_loader, val_loader
+
     def _load_keras_cifar100_data(self):
         (X_train, y_train), (X_val, y_val) = cifar100.load_data()
         X_train = X_train.astype('float32') / 255.0

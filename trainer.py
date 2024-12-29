@@ -8,6 +8,11 @@ class Trainer:
     def __init__(self, model_type):
         self.model_type = model_type
 
+    def sgd(self, model, lr):
+        for layer in model.layers:
+            layer.weights -= lr * layer.grad_weights
+            layer.bias -= lr * layer.grad_bias
+
     def train(self, model, **kwargs):
         if self.model_type == 'ann_regressor':
             return self._train_regression(model, **kwargs)
@@ -37,6 +42,35 @@ class Trainer:
             val_pred = model.forward(X_val)
             val_loss = loss_fn(val_pred, y_val).item()
             print(f"Reg Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Val Loss: {val_loss:.4f}")
+        end_time = time.time()
+        training_time = end_time - start_time
+        return model, training_time
+
+    def _train_classification(self, model, lr, epochs, batch_size, train_loader, val_loader, dataset='CIFAR10'):
+        loss_fn = torch.nn.CrossEntropyLoss()
+        start_time = time.time()
+        for epoch in range(epochs):
+            epoch_loss = 0
+            for batch_x, batch_y in train_loader:
+                batch_x = batch_x.view(batch_x.size(0), -1)
+                pred = model.forward(batch_x)
+                loss = loss_fn(pred, batch_y)
+                epoch_loss += loss.item()
+                batch_size_current = batch_y.size(0)
+                grad_loss = pred.clone()
+                grad_loss[range(batch_size_current), batch_y] -= 1
+                grad_loss /= batch_size_current
+                model.backward(grad_loss)
+                self.sgd(model, lr)
+                model.zero_grad()
+            val_loss = 0
+            with torch.no_grad():
+                for val_x, val_y in val_loader:
+                    val_x = val_x.view(val_x.size(0), -1)
+                    pred = model.forward(val_x)
+                    loss = loss_fn(pred, val_y)
+                    val_loss += loss.item()
+            print(f"Class Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Val Loss: {val_loss:.4f}")
         end_time = time.time()
         training_time = end_time - start_time
         return model, training_time
