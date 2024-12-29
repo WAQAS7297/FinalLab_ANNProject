@@ -42,7 +42,8 @@ The goal was to explore the capabilities of different frameworks and architectur
   - Hidden Layers: Two fully connected layers with 64 units each (ReLU activation).
   - Output: 1 unit (for regression output).
 
-  ![IMG-20241229-WA0031](https://github.com/user-attachments/assets/782cd90f-4919-4f4b-8822-a47ef920dae6)
+  ![image](https://github.com/user-attachments/assets/e9f5b08a-562e-4786-813f-9ace532e05e0)
+
 
 
 ### **3.2 PyTorch ANN (Classification)**
@@ -91,16 +92,16 @@ The goal was to explore the capabilities of different frameworks and architectur
 
 3. **Training Time Camparison**: 
 
-    ![alt text](IMG-20241229-WA0028.jpg)
+   ![image](https://github.com/user-attachments/assets/ce77b549-dff5-4ff6-b84c-a39a3db60ee8)
 
 #### Example:
 - **PyTorch ANN Confusion Matrix (CIFAR-100)**:
 
-  ![alt text](IMG-20241229-WA0034.jpg)
+  ![image](https://github.com/user-attachments/assets/95931a57-0e15-4f8b-a49c-90628b4b5ec6)
 
 - **Keras CNN Confusion Matrix (CIFAR-100)**:
 
-  ![alt text](IMG-20241229-WA0035.jpg)
+  ![image](https://github.com/user-attachments/assets/0fa4817c-e922-4da3-956c-af6ed7fe78dd)
 
 ---
 
@@ -110,7 +111,8 @@ The goal was to explore the capabilities of different frameworks and architectur
 - **PyTorch ANN (Regressor)**:
   - The model achieved reasonable accuracy with an R² of 0.61. Further tuning (e.g., adding dropout) may enhance performance.
 
-    ![alt text](IMG-20241229-WA0027.jpg)
+    ![image](https://github.com/user-attachments/assets/ea37840f-bcb5-4bbc-abcd-5bc5b628d754)
+
 - **PyTorch ANN (Classifier)**:
   - The classification accuracy of 82.4% is satisfactory given the dataset complexity. However, ANNs lack the ability to extract spatial features, which CNNs excel at.
 - **Keras CNN (Classifier)**:
