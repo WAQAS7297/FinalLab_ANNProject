@@ -32,4 +32,4 @@ The following libraries are required:
 
 ## Further Information
 
-For clarifications or additional details, reach out to [Your Name/Email].
+For clarifications or additional details, reach out to ranaatif1299@gmail.com
