@@ -2,11 +2,17 @@ import time
 import torch
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
+import numpy as np
 
 
 class Trainer:
     def __init__(self, model_type):
         self.model_type = model_type
+
+    def sgd(self, model, lr):
+        for layer in model.layers:
+            layer.weights -= lr * layer.grad_weights
+            layer.bias -= lr * layer.grad_bias
 
     def train(self, model, **kwargs):
         if self.model_type == 'ann_regressor':
@@ -18,7 +24,7 @@ class Trainer:
         else:
             raise ValueError("Unsupported model type.")
 
-    def _train_regression(self, model, lr, epochs, batch_size, X_train, y_train, X_val, y_val):
+    def _train_regression(self, model, lr, epochs, batch_size, X_train, y_train, X_val, y_val, X_test, y_test):
         loss_fn = torch.nn.MSELoss()
         start_time = time.time()
         history = {'train_losses': [], 'val_losses': []}
@@ -42,7 +48,39 @@ class Trainer:
             print(f"Reg Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Val Loss: {val_loss:.4f}")
         end_time = time.time()
         training_time = end_time - start_time
-        return model, training_time
+        return model, history, training_time
+
+    def _train_classification(self, model, lr, epochs, batch_size, train_loader, val_loader, dataset='CIFAR10'):
+        loss_fn = torch.nn.CrossEntropyLoss()
+        start_time = time.time()
+        history = {'train_losses': [], 'val_losses': []}
+        for epoch in range(epochs):
+            epoch_loss = 0
+            for batch_x, batch_y in train_loader:
+                batch_x = batch_x.view(batch_x.size(0), -1)
+                pred = model.forward(batch_x)
+                loss = loss_fn(pred, batch_y)
+                epoch_loss += loss.item()
+                batch_size_current = batch_y.size(0)
+                grad_loss = pred.clone()
+                grad_loss[range(batch_size_current), batch_y] -= 1
+                grad_loss /= batch_size_current
+                model.backward(grad_loss)
+                self.sgd(model, lr)
+                model.zero_grad()
+            val_loss = 0
+            with torch.no_grad():
+                for val_x, val_y in val_loader:
+                    val_x = val_x.view(val_x.size(0), -1)
+                    pred = model.forward(val_x)
+                    loss = loss_fn(pred, val_y)
+                    val_loss += loss.item()
+            history['train_losses'].append(epoch_loss)
+            history['val_losses'].append(val_loss)
+            print(f"Class Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Val Loss: {val_loss:.4f}")
+        end_time = time.time()
+        training_time = end_time - start_time
+        return model, history, training_time
 
     def _train_keras_cnn(self, model, X_train, y_train, X_val, y_val, lr=0.001, epochs=20, batch_size=64):
         model.model.compile(optimizer=Adam(learning_rate=lr),
