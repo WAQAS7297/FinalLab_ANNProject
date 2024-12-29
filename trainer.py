@@ -21,6 +21,7 @@ class Trainer:
     def _train_regression(self, model, lr, epochs, batch_size, X_train, y_train, X_val, y_val):
         loss_fn = torch.nn.MSELoss()
         start_time = time.time()
+        history = {'train_losses': [], 'val_losses': []}
         for epoch in range(epochs):
             permutation = torch.randperm(X_train.size()[0])
             epoch_loss = 0
@@ -36,6 +37,8 @@ class Trainer:
                 model.zero_grad()
             val_pred = model.forward(X_val)
             val_loss = loss_fn(val_pred, y_val).item()
+            history['train_losses'].append(epoch_loss)
+            history['val_losses'].append(val_loss)
             print(f"Reg Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}, Val Loss: {val_loss:.4f}")
         end_time = time.time()
         training_time = end_time - start_time
