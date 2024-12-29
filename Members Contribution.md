@@ -1,6 +1,6 @@
 # Project Work Distribution
 
-This project is a collaborative effort between **Member 1** and **Member B**, focused on implementing and comparing Neural Network models for regression and classification. This document details the specific tasks allocated to each member.
+This project is a collaborative effort between **Member A(ATIF)** and **Member B(WAQAS RAMZAN)**, focused on implementing and comparing Neural Network models for regression and classification. This document details the specific tasks allocated to each member.
 
 ## Member 1 Responsibilities
 
