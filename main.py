@@ -20,7 +20,6 @@ def main():
 
     data_loader = DataLoaderModule('regression')
     X_train, y_train, X_val_reg, y_val_reg = data_loader.load_data()
-    # Split validation set into validation and test sets
     X_val_reg, X_test_reg, y_val_reg, y_test_reg = train_test_split(X_val_reg, y_val_reg, test_size=0.5, random_state=42)
     reg_model = ANN_Regressor(reg_input_size, reg_hidden_sizes, reg_output_size)
     trainer = Trainer('ann_regressor')
@@ -63,7 +62,6 @@ def main():
     print(f"{'PyTorch ANN (Classifier)':<25}{'CIFAR-100':<25}{'LR=0.01, Epoch=30, Batch=64':<50}{f'Accuracy={class_accuracy:.2f}%':<60}{f'~{class_time/60:.2f} min'}")
     print(f"{'Keras CNN (Classifier)':<25}{'CIFAR-100':<25}{'LR=0.001, Epoch=50, Batch=64':<50}{f'Accuracy={keras_accuracy:.2f}%':<60}{f'~{keras_time/60:.2f} min'}")
 
-    # Comparative Visualizations
     model_names = ['PyTorch ANN (Regressor)', 'PyTorch ANN (Classifier)', 'Keras CNN (Classifier)']
     metrics = [
         (reg_mse, reg_mae, reg_r2),
@@ -77,16 +75,13 @@ def main():
 def plot_comparative_metrics(model_names, metrics, training_times):
     num_models = len(model_names)
     
-    # Metrics Bar Chart
     fig, axes = plt.subplots(1, 3, figsize=(18, 6))
     
-    # Regression Metrics
     axes[0].bar(model_names[0], metrics[0][0], label='MSE', color='skyblue')
     axes[0].bar(model_names[0], metrics[0][1], label='MAE', color='coral')
     axes[0].set_title('Regression Metrics')
     axes[0].legend()
     
-    # Classification Metrics
     axes[1].bar(model_names[1], metrics[1][0], label='Accuracy', color='lightgreen')
     axes[1].bar(model_names[1], metrics[1][1], label='Precision', color='lightcoral')
     axes[1].bar(model_names[1], metrics[1][2], label='F1-Score', color='gold')
@@ -103,7 +98,6 @@ def plot_comparative_metrics(model_names, metrics, training_times):
     plt.savefig("comparative_metrics.png")
     plt.close()
     
-    # Training Time Bar Chart
     plt.figure(figsize=(8, 6))
     plt.bar(model_names, training_times, color=['skyblue', 'lightgreen', 'lightcoral'])
     plt.title('Training Time Comparison')
