@@ -77,16 +77,13 @@ def main():
 def plot_comparative_metrics(model_names, metrics, training_times):
     num_models = len(model_names)
     
-    # Metrics Bar Chart
     fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-    
-    # Regression Metrics
+
     axes[0].bar(model_names[0], metrics[0][0], label='MSE', color='skyblue')
     axes[0].bar(model_names[0], metrics[0][1], label='MAE', color='coral')
     axes[0].set_title('Regression Metrics')
     axes[0].legend()
     
-    # Classification Metrics
     axes[1].bar(model_names[1], metrics[1][0], label='Accuracy', color='lightgreen')
     axes[1].bar(model_names[1], metrics[1][1], label='Precision', color='lightcoral')
     axes[1].bar(model_names[1], metrics[1][2], label='F1-Score', color='gold')
@@ -103,7 +100,6 @@ def plot_comparative_metrics(model_names, metrics, training_times):
     plt.savefig("comparative_metrics.png")
     plt.close()
     
-    # Training Time Bar Chart
     plt.figure(figsize=(8, 6))
     plt.bar(model_names, training_times, color=['skyblue', 'lightgreen', 'lightcoral'])
     plt.title('Training Time Comparison')
