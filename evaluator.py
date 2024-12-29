@@ -19,7 +19,7 @@ class Evaluator:
         else:
             raise ValueError("Unsupported model type.")
 
-    def _evaluate_regression(self, model, X_val, y_val):
+    def _evaluate_regression(self, model, X_val, y_val, X_test, y_test, history):
         with torch.no_grad():
             pred = model.forward(X_val)
             mse = mean_squared_error(y_val.numpy(), pred.numpy())
@@ -27,6 +27,10 @@ class Evaluator:
             r2 = r2_score(y_val.numpy(), pred.numpy())
 
         self._plot_regression_predictions(y_val.numpy(), pred.numpy())
+        self._plot_loss_curves(history, "PyTorch ANN Regressor")
+        self._plot_residual_plot(model, X_test, y_test, "PyTorch ANN Regressor")
+        self._plot_joint_distribution(model, X_test, y_test, "PyTorch ANN Regressor")
+        self._plot_distribution_actual_predicted(model, X_test, y_test, "PyTorch ANN Regressor")
         return mse, mae, r2
 
     def _evaluate_keras_cnn(self, model, X_val, y_val, history):
@@ -39,3 +43,5 @@ class Evaluator:
         self._plot_confusion_matrix(cm, "Keras CNN Classifier")
         self._plot_keras_training_history(history)
         return accuracy, cm, precision, recall, f1
+
+    
