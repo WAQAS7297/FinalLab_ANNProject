@@ -59,7 +59,7 @@ This project is a collaborative effort between **Member A(ATIF)** and **Member B
 
 ## Summary Table
 
-| Module         | Member 1                                                                     | Member B                                                                         |
+| Module         | Member A                                                                     | Member B                                                                         |
 | -------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `main.py`      | Manages PyTorch ANN Classification                                          | Manages PyTorch ANN Regression & Keras CNN Classification                         |
 | `DataLoader.py`| Classification data loading                                                   | Regression and Keras CIFAR-100 data loading.                                       |
